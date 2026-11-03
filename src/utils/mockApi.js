@@ -26,10 +26,21 @@ const HAS_ZHIPU_KEY = !isPlaceholder(API_KEY)
 const HAS_BAIDU_TOKEN = !isPlaceholder(BAIDU_ACCESS_TOKEN)
 /* ============================================================ */
 
-// Vite dev server 代理路径（见 vite.config.js）
-const ZHIPU_API_PATH = '/api/ai-chat'
+/*
+ * 接口地址按环境切换：
+ * - 开发环境（npm run dev）：走 vite.config.js 里的 /api 代理，规避浏览器 CORS
+ * - 生产环境（Netlify 等）：Vite 的 server.proxy 不会生效，必须直连官方完整域名
+ */
+// 注意：不能用带 _basic 后缀的精简版 OCR 接口，它不返回 location 坐标，画布无法定位绿框
+const BAIDU_OCR_ENDPOINT = import.meta.env.PROD
+  ? 'https://aip.baidubce.com/rest/2.0/ocr/v1/general'
+  : '/api/cv-classify'
+
+const ZHIPU_API_PATH = import.meta.env.PROD
+  ? 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
+  : '/api/ai-chat'
+
 const MODEL_NAME = 'glm-4-flash'
-const BAIDU_CV_PATH = '/api/cv-classify'
 
 const SYSTEM_PROMPT = `你是一个专业的交付项目经理，请将以下零散的批注，分类归纳为 [🔴 必须修复]、[🟡 体验优化]、[⚪ 需沟通] 三个类别，用 Markdown 格式输出，语言要精炼专业。`
 
@@ -53,7 +64,7 @@ export async function requestCvDetection({ base64, width, height } = {}) {
   }
 
   // ---- 百度要求：access_token 放 URL query，image 放 body ----
-  const url = `${BAIDU_CV_PATH}?access_token=${encodeURIComponent(BAIDU_ACCESS_TOKEN)}`
+  const url = `${BAIDU_OCR_ENDPOINT}?access_token=${encodeURIComponent(BAIDU_ACCESS_TOKEN)}`
   const body = new URLSearchParams({ image: base64 })
 
   let response
