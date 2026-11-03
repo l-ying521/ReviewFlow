@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    @apply bg-night-950 font-sans text-zinc-300 antialiased;
+  }
+
+  * {
+    @apply border-night-700;
+  }
+
+  ::selection {
+    @apply bg-violet-500/30 text-white;
+  }
+
+  /* 暗色细滚动条 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-night-600/70;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-night-600;
+  }
+}
+
+@layer components {
+  /* 画布区透明棋盘格 */
+  .checkerboard {
+    background-image:
+      linear-gradient(45deg, rgba(255, 255, 255, 0.025) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.025) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.025) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.025) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+
+  /* 顶栏/侧栏玻璃质感 */
+  .glass {
+    @apply bg-night-900/70 backdrop-blur-xl;
+  }
+
+  /* 高亮描边按钮 */
+  .btn-ghost {
+    @apply flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-night-800 hover:text-zinc-100;
+  }
+
+  .btn-primary {
+    @apply flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-500 px-4 py-2.5 text-sm font-medium text-white shadow-glow transition-all hover:from-violet-500 hover:to-indigo-400 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none;
+  }
+}
