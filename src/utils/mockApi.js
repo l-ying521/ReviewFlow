@@ -27,18 +27,14 @@ const HAS_BAIDU_TOKEN = !isPlaceholder(BAIDU_ACCESS_TOKEN)
 /* ============================================================ */
 
 /*
- * 接口地址按环境切换：
- * - 开发环境（npm run dev）：走 vite.config.js 里的 /api 代理，规避浏览器 CORS
- * - 生产环境（Netlify 等）：Vite 的 server.proxy 不会生效，必须直连官方完整域名
+ * 接口统一走相对路径 /api/*：
+ * - 开发环境：由 vite.config.js 的 server.proxy 转发（规避 CORS）
+ * - 生产环境：由 netlify.toml 的 redirects 做服务端代理（规避 CORS）
  */
 // 注意：不能用带 _basic 后缀的精简版 OCR 接口，它不返回 location 坐标，画布无法定位绿框
-const BAIDU_OCR_ENDPOINT = import.meta.env.PROD
-  ? 'https://aip.baidubce.com/rest/2.0/ocr/v1/general'
-  : '/api/cv-classify'
+const BAIDU_OCR_ENDPOINT = '/api/cv-classify'
 
-const ZHIPU_API_PATH = import.meta.env.PROD
-  ? 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
-  : '/api/ai-chat'
+const ZHIPU_API_PATH = '/api/ai-chat'
 
 const MODEL_NAME = 'glm-4-flash'
 

@@ -1,0 +1,23 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# 生产环境由 Netlify 服务端代理转发，避免 Vite server.proxy 失效导致的 404，
+# 同时绕开浏览器直连官方接口的 CORS 拦截
+[[redirects]]
+  from = "/api/cv-classify"
+  to = "https://aip.baidubce.com/rest/2.0/ocr/v1/general"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/ai-chat"
+  to = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+  status = 200
+  force = true
+
+# SPA 路由兜底
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
